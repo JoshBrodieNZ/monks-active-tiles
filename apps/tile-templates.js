@@ -1,7 +1,7 @@
 import { MonksActiveTiles, log, error, setting, i18n, makeid } from '../monks-active-tiles.js';
 import { TemplateConfig } from '../apps/template-config.js';
 
-export class TileTemplates extends DocumentDirectory {
+export class TileTemplates extends foundry.applications.sidebar.DocumentDirectory {
     constructor(options = {}) {
         super(options);
         this._original = {};

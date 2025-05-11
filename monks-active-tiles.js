@@ -2497,15 +2497,15 @@ export class MonksActiveTiles {
             } else
                 return wrapped(...args);
         }
-
-        if (game.modules.get("lib-wrapper")?.active) {
-            libWrapper.register("monks-active-tiles", "Hotbar.prototype._onClickMacro", clickMacro, "MIXED");
-        } else {
-            const oldClickMacro = Hotbar.prototype._onClickMacro;
-            Hotbar.prototype._onClickMacro = function (event) {
-                return clickMacro.call(this, oldClickMacro.bind(this), ...arguments);
-            }
-        }
+        //This breaks so we just got rid of it.
+        // if (game.modules.get("lib-wrapper")?.active) {
+        //     libWrapper.register("monks-active-tiles", "Hotbar.prototype._onClickMacro", clickMacro, "MIXED");
+        // } else {
+        //     const oldClickMacro = Hotbar.prototype._onClickMacro;
+        //     Hotbar.prototype._onClickMacro = function (event) {
+        //         return clickMacro.call(this, oldClickMacro.bind(this), ...arguments);
+        //     }
+        // }
 
         let tileDraw = function (wrapped, ...args) {
             if (this._transition) {
@@ -2892,7 +2892,7 @@ export class MonksActiveTiles {
         patchFunc("SceneDirectory.prototype._onClickEntryName", clickDocumentName, "MIXED");
         patchFunc("MacroDirectory.prototype._onClickEntryName", clickDocumentName, "MIXED");
         patchFunc("RollTableDirectory.prototype._onClickEntryName", clickDocumentName, "MIXED");
-        patchFunc("DocumentDirectory.prototype._onClickEntryName", checkClickDocumentName, "MIXED");
+        patchFunc("foundry.applications.sidebar.DocumentDirectory.prototype._onClickEntryName", checkClickDocumentName, "MIXED");
 
         let clickCompendiumEntry = async function (wrapped, ...args) {
             let event = args[0];
@@ -6172,7 +6172,7 @@ Hooks.on("renderTileConfig", (app, html, data) => {
                 .append($('<label>').html("Name"))
                 .append($("<div>")
                     .addClass("form-fields")
-                    .append($('<input>').attr('type', 'text').attr('name', 'flags.monks-active-tiles.name').val(app.object.getFlag('monks-active-tiles', 'name'))))
+                    .append($('<input>').attr('type', 'text').attr('name', 'flags.monks-active-tiles.name').val(app.document.getFlag('monks-active-tiles', 'name'))))
           );
 
     app.setPosition();
@@ -6378,17 +6378,40 @@ Hooks.on('updateWorldTime', async (worldTime) => {
 
 Hooks.on("getSceneControlButtons", (controls) => {
     if (game.user.isGM) {
-        let tileControls = controls.find(control => control.name === "tiles");
-        if (tileControls.tools.find(t => t.name == "templates") == undefined) {
-            tileControls.tools.push({
-                name: "templates",
-                title: "MonksActiveTiles.TileTemplates",
-                icon: "fas fa-folder-tree",
-                onClick: async () => {
-                    new TileTemplates().render(true);
-                },
-                button: true
-            });
+        // V13 Change: 'controls' is now an object where keys are control group names.
+        // Access 'tiles' control group directly as a property.
+        //This adds the button but TileTemplates isn't a valid format yet.
+        //It's not needed for the MVP "make tile actions work again" fix.
+        const tileControls = controls.tiles; 
+        if (tileControls) { // Ensure the 'tiles' control group was found
+            // V13 Change: 'tileControls.tools' is also an object, not an array.
+            // Check if the 'templates' tool exists as a property.
+            if (tileControls.tools.templates === undefined) { 
+                // Ensure tileControls.tools is an object if it doesn't exist
+                tileControls.tools = tileControls.tools || {};
+
+                // Since 'tileControls.tools' is an object, we need to add the new tool
+                // as a property. It's crucial to consider the 'order' property
+                // for how Foundry sorts these buttons in the UI.
+                // For simplicity, we'll just add it as a new property.
+                tileControls.tools.templates = {
+                    name: "templates",
+                    title: "MonksActiveTiles.TileTemplates", // Assuming this is a localization key
+                    icon: "fas fa-folder-tree",
+                    // SceneControlTool#onClick is deprecated in favor of SceneControlTool#onChange
+                    onChange: async (event, active) => {
+                        new TileTemplates().render(true); // Assuming TileTemplates is defined elsewhere
+                    },
+                    button: true,
+                    order: 3
+                };
+                // If you need to control the order precisely, you might need to convert
+                // tileControls.tools.values() to an array, sort them, and then reconstruct
+                // the tools object, or find the right place to inject it.
+                // However, for a simple addition, adding it as a property should work.
+            }
+        } else {
+            console.warn("Monk's Active Tiles: 'tiles' control group not found in SceneControlButtons.");
         }
     }
 });
