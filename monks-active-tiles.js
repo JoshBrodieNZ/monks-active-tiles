@@ -5585,6 +5585,14 @@ Hooks.on('ready', () => {
         game.settings.set("monks-active-tiles", "fix-scene", true);
         game.settings.set("monks-active-tiles", "fix-scene-again", true);
     }
+    /* 
+    Because Monk's Active Tiles replaces the TileConfig class with its own ActiveTileConfig class, and redefines its own PARTS object from scratch,
+    based on module load order other modules attempting to modify this class might have their changes overridden. If Active Tiles calls a hook, 
+    modules that want to be compatible with it can patch their changes into the config menu after Active Tiles has loaded rather than competing over 
+    running on the ready hook
+    */
+    Hooks.callAll("monksActiveTilesReady");
+    
 
     /*
     $("#board").on("pointerdown", function (event) {
@@ -6509,3 +6517,4 @@ Hooks.on("renderPlayers", (app, html, data, options) => {
         }
     });
 });
+
