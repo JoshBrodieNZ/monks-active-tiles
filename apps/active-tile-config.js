@@ -67,33 +67,22 @@ export const WithActiveTileConfig = (TileConfig) => {
             //}
         }
 
-        static PARTS = {
-            tabs: { template: "templates/generic/tab-navigation.hbs" },
-            position: { template: "templates/scene/tile/position.hbs" },
-            appearance: { template: "templates/scene/tile/appearance.hbs" },
-            overhead: { template: "templates/scene/tile/overhead.hbs" },
-            activetile: {
-                template: "modules/monks-active-tiles/templates/active-tile-config.hbs",
-                templates: [
-                    "modules/monks-active-tiles/templates/action-partial.hbs",
-                    "modules/monks-active-tiles/templates/image-partial.hbs"
-                ]
-            },
-            footer: { template: "templates/generic/form-footer.hbs" }
-        };
+        static get PARTS() {
+            return foundry.utils.mergeObject(TileConfig.PARTS, {
+                activetile: {
+                    template: "modules/monks-active-tiles/templates/active-tile-config.hbs",
+                    templates: [
+                        "modules/monks-active-tiles/templates/action-partial.hbs",
+                        "modules/monks-active-tiles/templates/image-partial.hbs"
+                    ]
+                }
+            });
+        }
 
-        static TABS = {
-            sheet: {
-                tabs: [
-                    { id: "position", icon: "fa-solid fa-location-dot" },
-                    { id: "appearance", icon: "fa-solid fa-image" },
-                    { id: "overhead", icon: "fa-solid fa-house" },
-                    { id: "activetile", icon: "fa-solid fa-running" }
-                ],
-                initial: "position",
-                labelPrefix: "TILE.TABS"
-            },
-            activetile: {
+        static get TABS() {
+            const tabs = foundry.utils.deepClone(TileConfig.TABS);
+            tabs.sheet.tabs.push({ id: "activetile", icon: "fa-solid fa-running" });
+            tabs.activetile = {
                 tabs: [
                     { id: "setup", icon: "fa-solid fa-cog" },
                     { id: "actions", icon: "fa-solid fa-running" },
@@ -101,8 +90,9 @@ export const WithActiveTileConfig = (TileConfig) => {
                 ],
                 initial: "setup",
                 labelPrefix: "MonksActiveTiles.tabs"
-            }
-        };
+            };
+            return tabs;
+        }
 
         async _prepareContext(options) {
             const context = await super._prepareContext(options);

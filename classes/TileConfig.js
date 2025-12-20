@@ -6,26 +6,16 @@ export class MATT_TileConfig extends foundry.applications.sheets.TileConfig {
         }
     }
 
-    static PARTS = {
-        tabs: { template: "templates/generic/tab-navigation.hbs" },
-        position: { template: "templates/scene/tile/position.hbs" },
-        appearance: { template: "templates/scene/tile/appearance.hbs" },
-        overhead: { template: "templates/scene/tile/overhead.hbs" },
-        activetile: { template: "modules/monks-active-tiles/templates/tile-config.html" },
-        footer: { template: "templates/generic/form-footer.hbs" }
-    };
+    static get PARTS() {
+        return foundry.utils.mergeObject(super.PARTS, {
+            activetile: { template: "modules/monks-active-tiles/templates/tile-config.html" }
+        });
+    }
 
-    static TABS = {
-        sheet: {
-            tabs: [
-                { id: "position", icon: "fa-solid fa-location-dot" },
-                { id: "appearance", icon: "fa-solid fa-image" },
-                { id: "overhead", icon: "fa-solid fa-house" }
-            ],
-            initial: "position",
-            labelPrefix: "TILE.TABS"
-        },
-        activetile: {
+    static get TABS() {
+        const tabs = foundry.utils.deepClone(super.TABS);
+        tabs.sheet.tabs.push({ id: "activetile", icon: "fa-solid fa-running" });
+        tabs.activetile = {
             tabs: [
                 { id: "setup", icon: "fa-solid fa-cog" },
                 { id: "actions", icon: "fa-solid fa-running" },
@@ -33,8 +23,9 @@ export class MATT_TileConfig extends foundry.applications.sheets.TileConfig {
             ],
             initial: "setup",
             labelPrefix: "MonksActiveTiles.tabs"
-        }
-    };
+        };
+        return tabs;
+    }
 
     async _preparePartContext(partId, context, options) {
         context = await super._preparePartContext(partId, context, options);
