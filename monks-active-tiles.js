@@ -1,5 +1,5 @@
 ﻿import { registerSettings } from "./settings.js";
-import { WithActiveTileConfig } from "./apps/active-tile-config.js"
+import { patchTileConfig } from "./apps/active-tile-config.js";
 import { ActionConfig } from "./apps/action-config.js";
 import { TileTemplates } from "./apps/tile-templates.js";
 import { BatchManager } from "./classes/BatchManager.js";
@@ -5541,8 +5541,7 @@ Hooks.on('ready', () => {
         MonksActiveTiles.TimeOffset = (createTime.hour * 3600) + (createTime.minute * 60) + createTime.second + (createTime.millisecond * 0.001);
     }
 
-    MonksActiveTiles._oldSheetClass = CONFIG.Tile.sheetClasses.base['core.TileConfig'].cls;
-    CONFIG.Tile.sheetClasses.base['core.TileConfig'].cls = WithActiveTileConfig(CONFIG.Tile.sheetClasses.base['core.TileConfig'].cls);
+    patchTileConfig();
 
     Object.defineProperty(CONFIG.Tile.documentClass.prototype, "name", {
         get: function () {

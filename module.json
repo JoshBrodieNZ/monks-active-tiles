@@ -1,7 +1,7 @@
 {
 	"title": "Monk's Active Tile Triggers",
 	"description": "Want to teleport, or open doors, or hide characters, or display a message, or play a sound, or change a token's elevation when a token walks over a tile... now you can",
-	"version": "13.06",
+	"version": "13.07",
 	"authors": [
 		{
 			"name": "IronMonk",
@@ -11,6 +11,10 @@
 				"patreon": "ironmonk",
 				"ko-fi": "ironmonk88"
 			}
+		},
+		{
+			"name": "JoshBrodieNZ",
+			"discord": "joshbrodienz"
 		}
 	],
 	"socket": true,
@@ -60,10 +64,10 @@
 	"styles": [
 		"css/monks-active-tiles.css"
 	],
-	"url": "https://github.com/ironmonk108/monks-active-tiles",
-	"download": "https://github.com/ironmonk108/monks-active-tiles/archive/13.06.zip",
-	"manifest": "https://github.com/ironmonk108/monks-active-tiles/releases/latest/download/module.json",
-	"bugs": "https://github.com/ironmonk108/monks-active-tiles/issues",
+	"url": "https://github.com/Ludibrium-VTT/monks-active-tiles",
+	"download": "https://github.com/Ludibrium-VTT/monks-active-tiles/releases/latest/monks-active-tiles.zip",
+	"manifest": "https://github.com/Ludibrium-VTT/monks-active-tiles/releases/latest/download/module.json",
+	"bugs": "https://github.com/Ludibrium-VTT/monks-active-tiles/issues",
 	"id": "monks-active-tiles",
 	"compatibility": {
 		"minimum": "13",
