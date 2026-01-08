@@ -65,8 +65,8 @@
 		"css/monks-active-tiles.css"
 	],
 	"url": "https://github.com/Ludibrium-VTT/monks-active-tiles",
-	"download": "https://github.com/Ludibrium-VTT/monks-active-tiles/releases/latest/monks-active-tiles.zip",
-	"manifest": "https://github.com/Ludibrium-VTT/monks-active-tiles/releases/latest/download/module.json",
+	"download": "https://github.com/Ludibrium-VTT/monks-active-tiles/releases/download/latest/monks-active-tiles.zip",
+	"manifest": "https://github.com/Ludibrium-VTT/monks-active-tiles/releases/download/latest/module.json",
 	"bugs": "https://github.com/Ludibrium-VTT/monks-active-tiles/issues",
 	"id": "monks-active-tiles",
 	"compatibility": {
